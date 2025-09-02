@@ -1,0 +1,35 @@
+[Unit]
+Description=EtherDrops Monitor Bot
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/etherdrops-monitor
+ExecStart=/usr/bin/node index.js
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=etherdrops-monitor
+
+# Resource limits
+LimitNOFILE=65536
+LimitNPROC=4096
+
+# Environment variables
+Environment=NODE_ENV=production
+Environment=NODE_OPTIONS=--max-old-space-size=512
+
+# Restart policy
+StartLimitInterval=60
+StartLimitBurst=3
+
+# Kill timeout
+TimeoutStopSec=30
+KillMode=mixed
+KillSignal=SIGTERM
+
+[Install]
+WantedBy=multi-user.target

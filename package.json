@@ -1,0 +1,21 @@
+{
+  "name": "etherdrops-monitor",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.11.0",
+    "body-parser": "^2.2.0",
+    "chalk": "^4.1.2",
+    "ethers": "^6.15.0",
+    "express": "^5.1.0",
+    "undici": "^6.21.3",
+    "ws": "^8.18.3"
+  }
+}
