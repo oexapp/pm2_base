@@ -58,7 +58,11 @@ mkdir -p logs
 
 # Start the application with PM2
 echo "🚀 Starting EtherDrops Monitor Bot with PM2..."
-pm2 start ecosystem.config.js --env production --only etherdrops-monitor-base || pm2 restart etherdrops-monitor-base
+# Try to start by ecosystem app name (etherdrops-monitor-base). If not configured, start by script with explicit name.
+if ! pm2 start ecosystem.config.js --env production --only etherdrops-monitor-base >/dev/null 2>&1; then
+  echo "ℹ️ Falling back to direct start: index.js as etherdrops-monitor-base"
+  pm2 start index.js --name etherdrops-monitor-base --time || true
+fi
 
 # Check if the process started successfully
 sleep 3
@@ -71,6 +75,17 @@ if pm2 list | grep -q "etherdrops-monitor-base.*online"; then
     echo "📝 To view logs: pm2 logs etherdrops-monitor-base"
     echo "📝 To stop: pm2 stop etherdrops-monitor-base"
     echo "📝 To restart: pm2 restart etherdrops-monitor-base"
+    echo "📝 To monitor: pm2 monit"
+elif pm2 list | grep -q "etherdrops-monitor.*online"; then
+    echo "✅ EtherDrops Monitor Bot is running under legacy name: etherdrops-monitor"
+    echo "➡️  Consider renaming in ecosystem.config.js to 'etherdrops-monitor-base' for consistency."
+    echo ""
+    echo "📊 PM2 Status:"
+    pm2 status etherdrops-monitor || pm2 list
+    echo ""
+    echo "📝 To view logs: pm2 logs etherdrops-monitor"
+    echo "📝 To stop: pm2 stop etherdrops-monitor"
+    echo "📝 To restart: pm2 restart etherdrops-monitor"
     echo "📝 To monitor: pm2 monit"
 else
     echo "❌ Failed to start EtherDrops Monitor Bot"
